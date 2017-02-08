@@ -3,11 +3,13 @@ using Android.Widget;
 using Android.OS;
 using System;
 using GoogleMapsApp.Application;
+using GoogleMapsApp.Models;
+using System.Threading.Tasks;
 using System.Linq;
 
 namespace GoogleMapsApp
 {
-    [Activity(Label = "Location Finder", MainLauncher = true, Icon = "@drawable/icon")]
+    [Activity(Label = "Google Maps App", MainLauncher = true, Icon = "@drawable/icon")]
     public class MainActivity : Activity
     {
         private static IGooglePlacesServiceV1 _placesService;
@@ -21,37 +23,28 @@ namespace GoogleMapsApp
 
             var addressSearchText = FindViewById<EditText>(Resource.Id.AddressSearchText);
             var addressSearchButton = FindViewById<Button>(Resource.Id.AddressSearchButton);
-           
-            addressSearchButton.Enabled = false;
-
-            addressSearchText.Click += (object sender, EventArgs e) =>
-            {
-                if (string.IsNullOrWhiteSpace(addressSearchText.Text))
-                {
-                    addressSearchButton.Enabled = false;
-                }
-                else
-                {
-                    addressSearchButton.Enabled = true;
-                }
-            };
-
+ 
             addressSearchButton.Click += async (object sender, EventArgs e) =>
             {
                 var alertDialog = new AlertDialog.Builder(this);
+                alertDialog.SetMessage("Searching...");
+                alertDialog.Show();
 
-                var placesResultList = await _placesService.GetPlacesAutoCompleteResults(addressSearchText.Text);
-                var firstResult = placesResultList.GooglePlacesResultsList.FirstOrDefault();
+                Task<GooglePlacesRootObject> placesResultListTask = _placesService.GetPlacesAutoCompleteResults(addressSearchText.Text);
+                var placesResultList = await placesResultListTask.ConfigureAwait(false);             
 
-                alertDialog.SetMessage($"First result was {firstResult.Description}");
-                alertDialog.SetNeutralButton("Find Location?", delegate
+                if (placesResultList.Predictions.Count > 0)
                 {
-                    //// Create intent to dial phone
-                    //var callIntent = new Intent(Intent.ActionCall);
-                    //callIntent.SetData(Android.Net.Uri.Parse("tel:" + translatedNumber));
-                    //StartActivity(callIntent);
-                });
-                alertDialog.SetNegativeButton("Cancel", delegate { });
+                    var firstResult = placesResultList.Predictions.FirstOrDefault();
+
+                    alertDialog.SetMessage($"First result was {firstResult.Description}");
+                    alertDialog.SetNeutralButton("Find Location?", delegate
+                    {
+                    });
+                    alertDialog.SetNegativeButton("Cancel", delegate { });
+                }
+                else
+                    alertDialog.SetMessage("No results found");
 
                 alertDialog.Show();
             };

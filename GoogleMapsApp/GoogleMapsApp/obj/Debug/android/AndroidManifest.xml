@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="GoogleMapsApp.GoogleMapsApp" android:versionCode="1" android:versionName="1.0">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="GoogleMapsApp.GoogleMapsApp" android:versionCode="1" android:versionName="1.0" android:installLocation="auto">
   <!--suppress UsesMinSdkAttributes-->
-  <uses-sdk android:minSdkVersion="16" />
+  <uses-sdk android:minSdkVersion="15" />
   <uses-permission android:name="android.permission.INTERNET" />
-  <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
   <application android:label="GoogleMapsApp" android:name="android.app.Application" android:allowBackup="true" android:icon="@drawable/icon" android:debuggable="true">
-    <activity android:icon="@drawable/icon" android:label="Location Finder" android:name="md5bb1087e8ef342a3dfefd1c3bcbbd9187.MainActivity">
+    <activity android:icon="@drawable/icon" android:label="Google Maps App" android:name="md5bb1087e8ef342a3dfefd1c3bcbbd9187.MainActivity">
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
         <category android:name="android.intent.category.LAUNCHER" />

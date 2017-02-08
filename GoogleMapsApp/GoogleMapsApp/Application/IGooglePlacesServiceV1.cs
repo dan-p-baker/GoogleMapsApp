@@ -5,6 +5,6 @@ namespace GoogleMapsApp.Application
 {
     public interface IGooglePlacesServiceV1
     {
-        Task<GooglePlacesResultsListModel> GetPlacesAutoCompleteResults(string query);
+        Task<GooglePlacesRootObject> GetPlacesAutoCompleteResults(string query);
     }
 }
